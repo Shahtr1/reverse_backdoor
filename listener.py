@@ -27,8 +27,6 @@ class Listener:
                 continue
 
     def execute_remotely(self, command):
-        self.connection.send(command)
-
         if command[0] == "exit":
             self.connection.close()
             exit()
