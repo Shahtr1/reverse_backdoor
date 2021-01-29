@@ -22,7 +22,7 @@ class Listener:
         return json.loads(json_data)
 
     def execute_remotely(self, command):
-        self.reliable_send()
+        self.reliable_send(command)
         return self.reliable_recv()
 
     def run(self):
